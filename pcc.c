@@ -99,6 +99,7 @@ Node *term() {
     if (tokens[pos].ty != ')') {
       error("Closing parenthesis not found: %s", tokens[pos].input);
     }
+    return node;
   }
 
   error("Neither a number nor a parenthesis: %s", tokens[pos].input);
