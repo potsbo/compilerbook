@@ -1,7 +1,7 @@
-9cc: 9cc.c
+pcc: pcc.c
 
-test: 9cc
+test: pcc
 	./test.sh
 
 clean:
-	rm -f 9cc *.o *~ tmp*
+	rm -f pcc *.o *~ tmp*
