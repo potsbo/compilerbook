@@ -43,6 +43,52 @@ Node *now_node_num(int val) {
   return node;
 }
 
+Node *expr() {
+  Node *lhs = mul();
+  if (tokens[pos].ty == '+') {
+    pos++;
+    return new_node('+', lhs, expr());
+  }
+
+  if (token[pos].ty == '-') {
+    pos++;
+    return new_node('-', lhs, expr());
+  }
+
+  return lhs
+}
+
+Node *mul() {
+  Node *lhs = term();
+  if (token[pos].ty == '*') {
+    pos++;
+    return new_node('*', lhs, mul());
+  }
+
+  if (tokens[pos].ty == '/') {
+    pos++;
+    return new_node('/', lhs, mul());
+  }
+
+  return lhs;
+}
+
+Node *term() {
+  if (tokens[pos].ty == TK_NUM) {
+    return new_node_num(tokens[pos++].val);
+  }
+
+  if (tokens[pos].ty == '(') {
+    pos++;
+    Node *node = expr();
+    if (tokens[pos].ty != ')') {
+      error("Closing parenthesis not found: %s", tokens[pos].input);
+    }
+  }
+
+  error("Neither a number nor a parenthesis: %s", tokens[pos].input);
+}
+
 void tokenize(char *p) {
   int i = 0;
   while (*p) {
@@ -74,6 +120,36 @@ void tokenize(char *p) {
 
   tokens[i].ty = TK_EOF;
   tokens[i].input = p;
+}
+
+void gen(Node *node) {
+  if (node->ty == ND_NUM) {
+    printf("  push %d\n", node->val);
+    return;
+  }
+
+  gen(node->lhs);
+  gen(node->rhs);
+
+  printf("  pop rdi\n");
+  printf("  pop rax\n");
+
+  switch (node->ty) {
+    case '+':
+      printf("  add rax, rdi\n");
+      break;
+    case '-':
+      printf("  sub rax, rdi\n");
+      break;
+    case '*':
+      printf("  mul rdi\n");
+      break;
+    case '/':
+      printf("  mov rdx, 0\n");
+      printf("  div rdi\n");
+  }
+
+  printf("  push rax\n");
 }
 
 void error(int i) {
