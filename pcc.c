@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdnoreturn.h>
+#include <stdarg.h>
 
 int pos = 0;
 
@@ -29,6 +31,14 @@ typedef struct Node {
   struct Node *rhs;
   int val;
 } Node;
+
+noreturn void error(char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+  exit(1);
+}
 
 Node *new_node(int ty, Node *lhs, Node *rhs) {
   Node *node = malloc(sizeof(Node));
