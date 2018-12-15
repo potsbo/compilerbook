@@ -45,6 +45,9 @@ Node *now_node_num(int val) {
   return node;
 }
 
+Node *mul();
+Node *term();
+
 Node *expr() {
   Node *lhs = mul();
   if (tokens[pos].ty == '+') {
@@ -152,11 +155,6 @@ void gen(Node *node) {
   }
 
   printf("  push rax\n");
-}
-
-void error(int i) {
-  fprintf(stderr, "Unexpected token: %s\n", tokens[i].input);
-  exit(1);
 }
 
 int main(int argc, char **argv) {
