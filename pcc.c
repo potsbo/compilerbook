@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int pos = 0;
+
 enum {
   TK_NUM = 256,
   TK_EOF,
@@ -50,7 +52,7 @@ Node *expr() {
     return new_node('+', lhs, expr());
   }
 
-  if (token[pos].ty == '-') {
+  if (tokens[pos].ty == '-') {
     pos++;
     return new_node('-', lhs, expr());
   }
@@ -60,7 +62,7 @@ Node *expr() {
 
 Node *mul() {
   Node *lhs = term();
-  if (token[pos].ty == '*') {
+  if (tokens[pos].ty == '*') {
     pos++;
     return new_node('*', lhs, mul());
   }
