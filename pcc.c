@@ -57,7 +57,7 @@ Node *expr() {
     return new_node('-', lhs, expr());
   }
 
-  return lhs
+  return lhs;
 }
 
 Node *mul() {
