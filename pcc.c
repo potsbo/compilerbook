@@ -17,7 +17,7 @@ Token tokens[100];
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    fprintf(stderr, "引数の個数が正しくありません\n");
+    fprintf(stderr, "Wrong number of arguments\n");
     return 1;
   }
 
